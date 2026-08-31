@@ -46,6 +46,20 @@ footer {
   font-size: 0.9rem;
 }
 
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.footer-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 /* ==========================================
    3. NAVEGACIÓN
    ========================================== */
@@ -54,6 +68,7 @@ footer {
   display: flex;
   justify-content: center;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .main-nav a {
@@ -72,6 +87,15 @@ footer {
 .main-nav a.active {
   background-color: var(--accent);
   color: #ffffff;
+}
+
+.main-nav a[target="_blank"] {
+  background-color: #24292e;
+  color: #ffffff;
+}
+
+.main-nav a[target="_blank"]:hover {
+  background-color: #000000;
 }
 
 /* ==========================================
@@ -132,6 +156,7 @@ figcaption {
   border-top: 1px solid var(--border);
   margin: 1.5rem 0;
 }
+
 ul {
   padding-left: 1.2rem;
 }
@@ -144,34 +169,25 @@ li {
   font-weight: bold;
   color: var(--text-primary);
 }
+
 /* ==========================================
    5. TEMA AJEDREZ (LICHESS)
    ========================================== */
 body.theme-chess {
-  /* Paleta de colores inspirada en tablero de madera */
-  --bg-color: #2b2622;         /* Oscuro de fondo (casi negro con matiz cálido) */
-  --card-bg: #edd6b0;        /* Madera clara / Casilla clara */
-  --card-bg-dark: #b58863;   /* Madera oscura / Casilla oscura */
-  --text-primary: #1e120b;    /* Texto principal en tono nogal muy oscuro */
-  --text-secondary: #3e2723;  /* Texto secundario */
-  --accent: #8b4513;          /* Marrón caoba para acentos */
+  --bg-color: #2b2622;
+  --card-bg: #edd6b0;
+  --card-bg-dark: #b58863;
+  --text-primary: #1e120b;
+  --text-secondary: #3e2723;
+  --accent: #8b4513;
   --accent-hover: #5c2e0b;
-  --border: #8c6849;          /* Borde con tono de madera */
-}
-
-/* Ajustes visuales específicos para el tema de Ajedrez */
-body.theme-chess {
+  --border: #8c6849;
   background-color: var(--bg-color);
-  color: #f0e6d2; /* Texto claro fuera de las tarjetas */
-}
-
-body.theme-chess header h1 {
   color: #f0e6d2;
 }
 
-body.theme-chess header p.subtitle {
-  color: #c2b299;
-}
+body.theme-chess header h1 { color: #f0e6d2; }
+body.theme-chess header p.subtitle { color: #c2b299; }
 
 body.theme-chess .card {
   background-color: var(--card-bg);
@@ -180,7 +196,6 @@ body.theme-chess .card {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Segunda tarjeta alternada con color de casilla oscura */
 body.theme-chess .card.dark-square {
   background-color: var(--card-bg-dark);
   color: #ffffff;
@@ -196,18 +211,9 @@ body.theme-chess .card.dark-square .stage-name {
   color: #ffffff;
 }
 
-body.theme-chess footer p {
-  color: #c2b299;
-}
-
-/* Navegación adaptada a la estética del tablero */
-body.theme-chess .main-nav a {
-  color: #f0e6d2;
-}
-
-body.theme-chess .main-nav a:hover {
-  background-color: rgba(237, 214, 176, 0.2);
-}
+body.theme-chess footer p { color: #c2b299; }
+body.theme-chess .main-nav a { color: #f0e6d2; }
+body.theme-chess .main-nav a:hover { background-color: rgba(237, 214, 176, 0.2); }
 
 body.theme-chess .main-nav a.active {
   background-color: var(--card-bg-dark);
@@ -216,144 +222,66 @@ body.theme-chess .main-nav a.active {
 }
 
 /* ==========================================
-   6. TABLERO DE AJEDREZ (CSS GRID)
+   6. TABLERO RESPONSIVO Y CASILLAS
    ========================================== */
-/* Contenedor principal del tablero */
 #board-container {
   width: 100%;
-  max-width: 480px; /* Tamaño máximo recomendado en PC */
-  margin: 0 auto;   /* Centra el tablero horizontalmente */
-  padding: 10px;
+  max-width: 480px;
+  margin: 1.5rem auto;
+  padding: 0;
   box-sizing: border-box;
 }
 
-/* Tablero flexible en cuadrícula 8x8 */
 #board {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
   width: 100%;
-  aspect-ratio: 1 / 1; /* Forzar proporción cuadrada perfecta */
-  touch-action: manipulation; /* Optimiza los toques en celulares */
+  aspect-ratio: 1 / 1;
+  border: 4px solid var(--border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation;
 }
 
-/* Casillas responsivas */
 .square {
   width: 100%;
   height: 100%;
-  box-sizing: border-box;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-/* Imágenes de las piezas ajustadas */
-.piece-img {
-  width: 90%;
-  height: 90%;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  pointer-events: none; /* Previene gestos raros al arrastrar en móviles */
-}
-
-
-#board-container {
-  display: flex;
-  justify-content: center;
-  margin: 1.5rem 0;
-}
-
-#board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  width: 100%;
-  max-width: 480px;
-  height: 480px;
-  border: 4px solid var(--border);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.square {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
   cursor: pointer;
   user-select: none;
 }
 
-/* Colores de casillas */
-.square.light {
-  background-color: #f0d9b5;
-}
+/* Colores estilo madera Lichess */
+.square.light { background-color: #f0d9b5; }
+.square.dark { background-color: #b58863; }
+.square.selected { background-color: #829769 !important; }
 
-.square.dark {
-  background-color: #b58863;
-}
-
-@media (max-width: 500px) {
-  #board {
-    height: 320px;
-  }
-  .square {
-    font-size: 1.5rem;
-  }
-}
-
-.piece-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none; /* Evita arrastres indeseados de imágenes del navegador */
-  user-select: none;
-}
-
-/* Asegura que la casilla sea el contenedor relativo del punto */
-.square {
-  position: relative;
-}
-
-
-
-/* Casilla seleccionada (verde oscuro) */
-.square.selected {
-  background-color: #829769 !important;
-}
-
-/* Círculos indicadores de movimiento (verde semitransparente) */
+/* Indicador de movimiento posible */
 .move-dot {
   position: absolute;
   width: 28%;
   height: 28%;
-  background-color: rgba(20, 85, 30, 0.4); /* Verde oscuro traslúcido */
+  background-color: rgba(20, 85, 30, 0.4);
   border-radius: 50%;
   pointer-events: none;
   z-index: 2;
 }
-.main-nav a[target="_blank"] {
-  background-color: #24292e; /* Color oscuro característico de GitHub */
-  color: #ffffff;
+
+/* Imágenes de las piezas */
+.piece-img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
 }
 
-.main-nav a[target="_blank"]:hover {
-  background-color: #000000;
-}
-.footer-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px; /* Espacio entre la imagen y el texto */
-}
-
-.footer-logo {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%; /* Hace la imagen circular (opcional) */
-  object-fit: cover;
-}
+/* ==========================================
+   7. SECCIÓN DE LICHESS Y PRÁCTICA
+   ========================================== */
 .lichess-profile-box {
   margin-top: 25px;
   padding-top: 15px;
@@ -361,29 +289,10 @@ body.theme-chess .main-nav a.active {
   text-align: center;
 }
 
-
-/* Botón estilo Lichess */
-.btn-lichess {
-  display: inline-block;
-  padding: 8px 18px;
-  background-color: #262421;
-  color: #ffffff;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.btn-lichess:hover {
-  background-color: #383531;
-  transform: translateY(-1px);
-}
-/* Botón principal estilo Lichess */
 .btn-lichess {
   display: inline-flex;
   align-items: center;
-  gap: 10px; /* Espaciado entre el logo y el texto */
+  gap: 10px;
   padding: 10px 20px;
   background-color: #262421;
   color: #ffffff;
@@ -394,24 +303,22 @@ body.theme-chess .main-nav a.active {
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Tamaño y color del ícono SVG */
+.btn-lichess:hover {
+  background-color: #383531;
+  transform: translateY(-2px);
+}
+
 .lichess-icon {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
 }
 
-/* Efecto al pasar el cursor por encima */
-.btn-lichess:hover {
-  background-color: #383531;
-  transform: translateY(-2px);
-}
-/* Caja de práctica e instrucciones */
 .practice-box {
   margin-top: 20px;
   padding: 16px 20px;
   background-color: #f8f9fa;
-  border-left: 4px solid #829769; /* Verde estilo ajedrez */
+  border-left: 4px solid #829769;
   border-radius: 4px;
   text-align: left;
 }
