@@ -1,247 +1,393 @@
-/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
-
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
-/* ==========================================================================
-   Base styles: opinionated defaults
-   ========================================================================== */
-
-html {
-  color: #222;
-  font-size: 1em;
-  line-height: 1.4;
+/* ==========================================
+   1. VARIABLES & RESET
+   ========================================== */
+:root {
+  --bg-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --accent: #2b6cb0;
+  --accent-hover: #1a4971;
+  --border: #e2e8f0;
 }
 
-/*
- * Remove text-shadow in selection highlight:
- * https://twitter.com/miketaylr/status/12228805301
- *
- * Customize the background color to match your design.
- */
-
-::-moz-selection {
-  background: #b3d4fc;
-  text-shadow: none;
+* {
+  box-sizing: border-box;
 }
 
-::selection {
-  background: #b3d4fc;
-  text-shadow: none;
-}
-
-/*
- * A better looking default horizontal rule
- */
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-/*
- * Remove the gap between audio, canvas, iframes,
- * images, videos and the bottom of their containers:
- * https://github.com/h5bp/html5-boilerplate/issues/440
- */
-
-audio,
-canvas,
-iframe,
-img,
-svg,
-video {
-  vertical-align: middle;
-}
-
-/*
- * Remove default fieldset styles.
- */
-
-fieldset {
-  border: 0;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.7;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
   margin: 0;
-  padding: 0;
+  padding: 2rem 1rem;
 }
 
-/*
- * Allow only vertical resizing of textareas.
- */
-
-textarea {
-  resize: vertical;
+/* ==========================================
+   2. LAYOUT & CONTENEDORES
+   ========================================== */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-/* ==========================================================================
-   Author's custom styles
-   ========================================================================== */
-
-/* ==========================================================================
-   Helper classes
-   ========================================================================== */
-
-/*
- * Hide visually and from screen readers
- */
-
-.hidden,
-[hidden] {
-  display: none !important;
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
 }
 
-/*
- * Hide only visually, but have it available for screen readers:
- * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
- *
- * 1. For long content, line feeds are not interpreted as spaces and small width
- *    causes content to wrap 1 word per line:
- *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
- */
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
 
-.visually-hidden {
+/* ==========================================
+   3. NAVEGACIÓN
+   ========================================== */
+.main-nav {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.main-nav a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.main-nav a:hover {
+  background-color: #e2e8f0;
+}
+
+.main-nav a.active {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+/* ==========================================
+   4. COMPONENTES & TARJETAS
+   ========================================== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}
+
+h1 {
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  color: var(--accent);
+  margin-top: 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+p.subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.preamble {
+  font-family: Georgia, serif;
+  font-style: italic;
+  background-color: #f7fafc;
+  padding: 1.5rem;
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+}
+
+blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid #cbd5e0;
+  color: var(--text-secondary);
+}
+
+figcaption {
+  font-weight: bold;
+  margin-top: 0.5rem;
+  color: var(--accent);
+  text-align: right;
+}
+
+.divider {
   border: 0;
-  clip: rect(0, 0, 0, 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+ul {
+  padding-left: 1.2rem;
+}
+
+li {
+  margin-bottom: 0.8rem;
+}
+
+.piece-name, .stage-name {
+  font-weight: bold;
+  color: var(--text-primary);
+}
+/* ==========================================
+   5. TEMA AJEDREZ (LICHESS)
+   ========================================== */
+body.theme-chess {
+  /* Paleta de colores inspirada en tablero de madera */
+  --bg-color: #2b2622;         /* Oscuro de fondo (casi negro con matiz cálido) */
+  --card-bg: #edd6b0;        /* Madera clara / Casilla clara */
+  --card-bg-dark: #b58863;   /* Madera oscura / Casilla oscura */
+  --text-primary: #1e120b;    /* Texto principal en tono nogal muy oscuro */
+  --text-secondary: #3e2723;  /* Texto secundario */
+  --accent: #8b4513;          /* Marrón caoba para acentos */
+  --accent-hover: #5c2e0b;
+  --border: #8c6849;          /* Borde con tono de madera */
+}
+
+/* Ajustes visuales específicos para el tema de Ajedrez */
+body.theme-chess {
+  background-color: var(--bg-color);
+  color: #f0e6d2; /* Texto claro fuera de las tarjetas */
+}
+
+body.theme-chess header h1 {
+  color: #f0e6d2;
+}
+
+body.theme-chess header p.subtitle {
+  color: #c2b299;
+}
+
+body.theme-chess .card {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  border: 3px solid var(--border);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Segunda tarjeta alternada con color de casilla oscura */
+body.theme-chess .card.dark-square {
+  background-color: var(--card-bg-dark);
+  color: #ffffff;
+}
+
+body.theme-chess .card.dark-square h2 {
+  color: #f0e6d2;
+  border-bottom-color: #8c6849;
+}
+
+body.theme-chess .card.dark-square .piece-name,
+body.theme-chess .card.dark-square .stage-name {
+  color: #ffffff;
+}
+
+body.theme-chess footer p {
+  color: #c2b299;
+}
+
+/* Navegación adaptada a la estética del tablero */
+body.theme-chess .main-nav a {
+  color: #f0e6d2;
+}
+
+body.theme-chess .main-nav a:hover {
+  background-color: rgba(237, 214, 176, 0.2);
+}
+
+body.theme-chess .main-nav a.active {
+  background-color: var(--card-bg-dark);
+  color: #ffffff;
+  border: 1px solid var(--border);
+}
+
+/* ==========================================
+   6. TABLERO DE AJEDREZ (CSS GRID)
+   ========================================== */
+#board-container {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  max-width: 480px;
+  height: 480px;
+  border: 4px solid var(--border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Colores de casillas */
+.square.light {
+  background-color: #f0d9b5;
+}
+
+.square.dark {
+  background-color: #b58863;
+}
+
+@media (max-width: 500px) {
+  #board {
+    height: 320px;
+  }
+  .square {
+    font-size: 1.5rem;
+  }
+}
+
+.piece-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none; /* Evita arrastres indeseados de imágenes del navegador */
+  user-select: none;
+}
+
+/* Asegura que la casilla sea el contenedor relativo del punto */
+.square {
+  position: relative;
+}
+
+
+
+/* Casilla seleccionada (verde oscuro) */
+.square.selected {
+  background-color: #829769 !important;
+}
+
+/* Círculos indicadores de movimiento (verde semitransparente) */
+.move-dot {
   position: absolute;
-  white-space: nowrap;
-  width: 1px;
-  /* 1 */
+  width: 28%;
+  height: 28%;
+  background-color: rgba(20, 85, 30, 0.4); /* Verde oscuro traslúcido */
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+.main-nav a[target="_blank"] {
+  background-color: #24292e; /* Color oscuro característico de GitHub */
+  color: #ffffff;
 }
 
-/*
- * Extends the .visually-hidden class to allow the element
- * to be focusable when navigated to via the keyboard:
- * https://www.drupal.org/node/897638
- */
+.main-nav a[target="_blank"]:hover {
+  background-color: #000000;
+}
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Espacio entre la imagen y el texto */
+}
 
-.visually-hidden.focusable:active,
-.visually-hidden.focusable:focus {
-  clip: auto;
-  height: auto;
+.footer-logo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%; /* Hace la imagen circular (opcional) */
+  object-fit: cover;
+}
+.lichess-profile-box {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+
+/* Botón estilo Lichess */
+.btn-lichess {
+  display: inline-block;
+  padding: 8px 18px;
+  background-color: #262421;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-lichess:hover {
+  background-color: #383531;
+  transform: translateY(-1px);
+}
+/* Botón principal estilo Lichess */
+.btn-lichess {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px; /* Espaciado entre el logo y el texto */
+  padding: 10px 20px;
+  background-color: #262421;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Tamaño y color del ícono SVG */
+.lichess-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+/* Efecto al pasar el cursor por encima */
+.btn-lichess:hover {
+  background-color: #383531;
+  transform: translateY(-2px);
+}
+/* Caja de práctica e instrucciones */
+.practice-box {
+  margin-top: 20px;
+  padding: 16px 20px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #829769; /* Verde estilo ajedrez */
+  border-radius: 4px;
+  text-align: left;
+}
+
+.practice-box h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.practice-box p {
   margin: 0;
-  overflow: visible;
-  position: static;
-  white-space: inherit;
-  width: auto;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  color: #4a5568;
 }
-
-/*
- * Hide visually and from screen readers, but maintain layout
- */
-
-.invisible {
-  visibility: hidden;
-}
-
-/*
- * Clearfix: contain floats
- *
- * The use of `table` rather than `block` is only necessary if using
- * `::before` to contain the top-margins of child elements.
- */
-
-.clearfix::before,
-.clearfix::after {
-  content: "";
-  display: table;
-}
-
-.clearfix::after {
-  clear: both;
-}
-
-/* ==========================================================================
-   EXAMPLE Media Queries for Responsive Design.
-   These examples override the primary ('mobile first') styles.
-   Modify as content requires.
-   ========================================================================== */
-
-@media only screen and (min-width: 35em) {
-  /* Style adjustments for viewports that meet the condition */
-}
-
-@media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
-  /* Style adjustments for high resolution devices */
-}
-
-/* ==========================================================================
-   Print styles.
-   Inlined to avoid the additional HTTP request:
-   https://www.phpied.com/delay-loading-your-print-css/
-   ========================================================================== */
-
-@media print {
-  *,
-  *::before,
-  *::after {
-    background: #fff !important;
-    color: #000 !important;
-    /* Black prints faster */
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  a,
-  a:visited {
-    text-decoration: underline;
-  }
-
-  a[href]::after {
-    content: " (" attr(href) ")";
-  }
-
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
-
-  /*
-   * Don't show links that are fragment identifiers,
-   * or use the `javascript:` pseudo protocol
-   */
-  a[href^="#"]::after,
-  a[href^="javascript:"]::after {
-    content: "";
-  }
-
-  pre {
-    white-space: pre-wrap !important;
-  }
-
-  pre,
-  blockquote {
-    border: 1px solid #999;
-    page-break-inside: avoid;
-  }
-
-  tr,
-  img {
-    page-break-inside: avoid;
-  }
-
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
-  }
-
-  h2,
-  h3 {
-    page-break-after: avoid;
-  }
-}
-

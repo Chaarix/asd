@@ -3,99 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Favicon JPG para la pestaña del navegador -->
-  <link rel="icon" type="image/jpeg" href="favcon.jpg">
-
   <title>Texto & Historia</title>
-  <style>
-    :root {
-      --bg-color: #f8f9fa;
-      --card-bg: #ffffff;
-      --text-primary: #212529;
-      --text-secondary: #495057;
-      --accent: #2b6cb0;
-      --border: #e2e8f0;
-    }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.7;
-      background-color: var(--bg-color);
-      color: var(--text-primary);
-      margin: 0;
-      padding: 2rem 1rem;
-    }
+  <!-- Favicon -->
+  <!-- Favicon con el caballo blanco normal -->
+  <link rel="icon" type="image/svg+xml" href="img/wN.svg">
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 3rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 2px solid var(--border);
-    }
-
-    h1 {
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-    }
-
-    p.subtitle {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      margin: 0;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border-radius: 8px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      border: 1px solid var(--border);
-    }
-
-    h2 {
-      color: var(--accent);
-      margin-top: 0;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0.5rem;
-    }
-
-    .preamble {
-      font-family: Georgia, serif;
-      font-style: italic;
-      background-color: #f7fafc;
-      padding: 1.5rem;
-      border-left: 4px solid var(--accent);
-      border-radius: 4px;
-    }
-
-    blockquote {
-      margin: 1.5rem 0;
-      padding-left: 1rem;
-      border-left: 3px solid #cbd5e0;
-      color: var(--text-secondary);
-    }
-
-    figcaption {
-      font-weight: bold;
-      margin-top: 0.5rem;
-      color: var(--accent);
-      text-align: right;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-  </style>
+  <!-- Hoja de Estilos Externa -->
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -103,6 +18,13 @@
   <header>
     <h1>Textos Históricos y Citas</h1>
     <p class="subtitle">Página estática de prueba alojada en GitHub Pages</p>
+
+    <!-- Navegación ubicada correctamente en el cuerpo visible -->
+    <nav class="main-nav">
+      <a href="index.html" class="active">Inicio</a>
+      <a href="lichess.html">Ajedrez</a>
+      <a href="https://github.com/Chaarix" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </nav>
   </header>
 
   <main>
@@ -125,7 +47,7 @@
         <figcaption>— Ernesto "Che" Guevara</figcaption>
       </figure>
 
-      <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+      <hr class="divider">
 
       <figure>
         <blockquote>
@@ -134,7 +56,8 @@
         <figcaption>— Martin Luther King Jr. (1963)</figcaption>
       </figure>
 
-      <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+      <hr class="divider">
+
 
       <figure>
         <blockquote>
@@ -144,9 +67,13 @@
       </figure>
     </section>
   </main>
-
   <footer>
-    <p>Sitio web creado para testear el flujo de desarrollo con IntelliJ y GitHub Pages.</p>
+    <div class="footer-content">
+      <img src="perrito.jpg" alt="Yo" class="footer-logo">
+    </div>
+  </footer>
+  <footer>
+    <p>Desarrollado por Eliseo :)</p>
   </footer>
 </div>
 
