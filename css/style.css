@@ -348,7 +348,7 @@ body.theme-chess .main-nav a.active {
   margin-top: 0;
   margin-bottom: 8px;
   font-size: 1.1rem;
-  color: var(--text-primary);
+  color: #ffffff; /* Mayor contraste para el título */
   display: flex;
   align-items: center;
   gap: 6px;
@@ -358,7 +358,7 @@ body.theme-chess .main-nav a.active {
   margin: 0;
   font-size: 0.93rem;
   line-height: 1.5;
-  color: var(--text-secondary);
+  color: #e2e8f0; /* Gris muy claro para alta legibilidad */
 }
 
 /* ==========================================
