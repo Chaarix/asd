@@ -1,33 +1,150 @@
-<!doctype html>
-<html class="no-js" lang="">
-
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Texto & Historia</title>
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #495057;
+      --accent: #2b6cb0;
+      --border: #e2e8f0;
+    }
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      margin: 0;
+      padding: 2rem 1rem;
+    }
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h1 {
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--border);
+    }
+
+    h2 {
+      color: var(--accent);
+      margin-top: 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+
+    .preamble {
+      font-family: Georgia, serif;
+      font-style: italic;
+      background-color: #f7fafc;
+      padding: 1.5rem;
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+    }
+
+    blockquote {
+      margin: 1.5rem 0;
+      padding-left: 1rem;
+      border-left: 3px solid #cbd5e0;
+      color: var(--text-secondary);
+    }
+
+    figcaption {
+      font-weight: bold;
+      margin-top: 0.5rem;
+      color: var(--accent);
+      text-align: right;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
-
 <body>
 
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <script src="js/app.js"></script>
+<div class="container">
+  <header>
+    <h1>Textos Históricos y Citas</h1>
+    <p class="subtitle">Página estática de prueba alojada en GitHub Pages</p>
+  </header>
+
+  <main>
+    <!-- Preámbulo -->
+    <section class="card">
+      <h2>Preámbulo de la Constitución Argentina</h2>
+      <p class="preamble">
+        Nos los representantes del pueblo de la Nación Argentina, reunidos en Congreso General Constituyente por voluntad y elección de las provincias que la componen, en cumplimiento de pactos preexistentes, con el objeto de constituir la unión nacional, afianzar la justicia, consolidar la paz interior, proveer a la defensa común, promover el bienestar general, y asegurar los beneficios de la libertad, para nosotros, para nuestra posteridad, y para todos los hombres del mundo que quieran habitar en el suelo argentino: invocando la protección de Dios, fuente de toda razón y justicia: ordenamos, decretamos y establecemos esta Constitución, para la Nación Argentina.
+      </p>
+    </section>
+
+    <!-- Citas Históricas -->
+    <section class="card">
+      <h2>Frases y Discursos Históricos</h2>
+
+      <figure>
+        <blockquote>
+          "Si el presente es de lucha, el futuro es nuestro."
+        </blockquote>
+        <figcaption>— Ernesto "Che" Guevara</figcaption>
+      </figure>
+
+      <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+
+      <figure>
+        <blockquote>
+          "Tengo un sueño: que un día esta nación se levantará y vivirá el verdadero significado de su credo: 'Sostenemos que estas verdades son evidentes por sí mismas: que todos los hombres son creados iguales'."
+        </blockquote>
+        <figcaption>— Martin Luther King Jr. (1963)</figcaption>
+      </figure>
+
+      <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+
+      <figure>
+        <blockquote>
+          "La libertad no nos es dada por la gracia de nadie, ni por la gracia de un rey, ni por la gracia de un presidente. Nos pertenece por derecho de nacimiento."
+        </blockquote>
+        <figcaption>— José de San Martín</figcaption>
+      </figure>
+    </section>
+  </main>
+
+  <footer>
+    <p>Sitio web creado para testear el flujo de desarrollo con IntelliJ y GitHub Pages.</p>
+  </footer>
+</div>
 
 </body>
-
 </html>
