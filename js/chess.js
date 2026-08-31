@@ -8,6 +8,9 @@ const PIECE_IMAGES = {
   'bB': 'img/bB.svg', 'bQ': 'img/bQ.svg', 'bK': 'img/bK.svg'
 };
 
+const PIECE_SYMBOLS = { 'P': '', 'N': 'N', 'B': 'B', 'R': 'R', 'Q': 'Q', 'K': 'K' };
+const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
 const WHITE_PIECES = ['wP', 'wR', 'wN', 'wB', 'wQ', 'wK'];
 const BLACK_PIECES = ['bP', 'bR', 'bN', 'bB', 'bQ', 'bK'];
 
@@ -25,6 +28,8 @@ const initialBoard = [
 let boardState = structuredClone(initialBoard);
 let selectedSquare = null;
 let turn = 'white';
+let isGameOver = false;
+let moveHistory = [];
 
 let hasMoved = {
   whiteKing: false, blackKing: false,
@@ -42,7 +47,6 @@ function getPieceColor(piece) {
 // REGLAS DE MOVIMIENTO
 // ==========================================
 
-// 1. PEÓN
 function isValidPawnMove(from, to, piece) {
   const color = getPieceColor(piece);
   const direction = color === 'white' ? -1 : 1;
@@ -66,7 +70,7 @@ function isValidPawnMove(from, to, piece) {
     return true;
   }
 
-  // Peón al Paso (En Passant)
+  // Peón al Paso
   if (colDiff === 1 && rowDiff === direction && !targetPiece && enPassantTarget) {
     if (to.row === enPassantTarget.row && to.col === enPassantTarget.col) {
       return true;
@@ -90,19 +94,16 @@ function getLegalMovesForSquare(from) {
   return legalMoves;
 }
 
-// 2. REY
 function isValidKingMove(from, to, piece) {
   const color = getPieceColor(piece);
   const rowDiff = Math.abs(to.row - from.row);
   const colDiff = Math.abs(to.col - from.col);
 
-  // Movimiento normal de 1 casilla
   if (rowDiff <= 1 && colDiff <= 1) return true;
 
-  // Enroque (2 casillas en horizontal)
-  if (rowDiff === 0 && (to.col - from.col === 2 || to.col - from.col === -2)) {
+  // Enroque
+  if (rowDiff === 0 && Math.abs(to.col - from.col) === 2) {
     const enemyColor = color === 'white' ? 'black' : 'white';
-
     if (isSquareAttacked(from, enemyColor)) return false;
 
     const isKingSide = to.col > from.col;
@@ -174,13 +175,38 @@ function isMoveValid(from, to, ignoreKingCastling = false) {
 }
 
 // ==========================================
+// NOTACIÓN ALGEBRAICA PARA EL HISTORIAL
+// ==========================================
+function getNotation(from, to, piece, isCapture, isCheck, isMate) {
+  const pieceType = piece[1];
+  const toSquare = `${FILES[to.col]}${8 - to.row}`;
+
+  if (pieceType === 'K' && Math.abs(to.col - from.col) === 2) {
+    return to.col > from.col ? 'O-O' : 'O-O-O';
+  }
+
+  let notation = PIECE_SYMBOLS[pieceType];
+  if (pieceType === 'P' && isCapture) {
+    notation += FILES[from.col];
+  }
+  if (isCapture) notation += 'x';
+  notation += toSquare;
+
+  if (isMate) notation += '#';
+  else if (isCheck) notation += '+';
+
+  return notation;
+}
+
+// ==========================================
 // EJECUCIÓN DEL MOVIMIENTO
 // ==========================================
 function executeMove(from, to) {
   const piece = boardState[from.row][from.col];
   const color = getPieceColor(piece);
+  let isCapture = boardState[to.row][to.col] !== null;
 
-  // 1. Manejo de Enroque
+  // Enroque
   if ((piece === 'wK' || piece === 'bK') && Math.abs(to.col - from.col) === 2) {
     const isKingSide = to.col > from.col;
     const rookFromCol = isKingSide ? 7 : 0;
@@ -190,11 +216,12 @@ function executeMove(from, to) {
     boardState[from.row][rookFromCol] = null;
   }
 
-  // 2. Manejo de Peón al Paso
+  // Peón al Paso
   if ((piece === 'wP' || piece === 'bP') && enPassantTarget) {
     if (to.row === enPassantTarget.row && to.col === enPassantTarget.col) {
       const capturedPawnRow = color === 'white' ? to.row + 1 : to.row - 1;
       boardState[capturedPawnRow][to.col] = null;
+      isCapture = true;
     }
   }
 
@@ -202,7 +229,7 @@ function executeMove(from, to) {
   boardState[to.row][to.col] = piece;
   boardState[from.row][from.col] = null;
 
-  // 3. Actualizar Peón al Paso
+  // Actualizar Peón al Paso
   if ((piece === 'wP' || piece === 'bP') && Math.abs(to.row - from.row) === 2) {
     const targetRow = color === 'white' ? from.row - 1 : from.row + 1;
     enPassantTarget = { row: targetRow, col: from.col };
@@ -210,11 +237,11 @@ function executeMove(from, to) {
     enPassantTarget = null;
   }
 
-  // 4. Promoción del Peón
+  // Promoción del Peón
   if (piece === 'wP' && to.row === 0) boardState[to.row][to.col] = 'wQ';
   if (piece === 'bP' && to.row === 7) boardState[to.row][to.col] = 'bQ';
 
-  // 5. Registrar movimientos de Torres y Reyes
+  // Registrar movimientos de Torres y Reyes
   if (from.row === 7 && from.col === 4) hasMoved.whiteKing = true;
   if (from.row === 0 && from.col === 4) hasMoved.blackKing = true;
   if (from.row === 7 && from.col === 7) hasMoved.whiteRookK = true;
@@ -222,17 +249,26 @@ function executeMove(from, to) {
   if (from.row === 0 && from.col === 7) hasMoved.blackRookK = true;
   if (from.row === 0 && from.col === 0) hasMoved.blackRookQ = true;
 
-  // 6. Si se captura una torre enemiga en su origen, desactivar su enroque
   if (to.row === 0 && to.col === 0) hasMoved.blackRookQ = true;
   if (to.row === 0 && to.col === 7) hasMoved.blackRookK = true;
   if (to.row === 7 && to.col === 0) hasMoved.whiteRookQ = true;
   if (to.row === 7 && to.col === 7) hasMoved.whiteRookK = true;
 
-  turn = turn === 'white' ? 'black' : 'white';
+  const nextTurn = color === 'white' ? 'black' : 'white';
+  const inCheck = isKingInCheck(nextTurn);
+  const movesAvailable = hasAnyLegalMove(nextTurn);
+  const isMate = inCheck && !movesAvailable;
+
+  // Guardar en Historial
+  const moveText = getNotation(from, to, piece, isCapture, inCheck, isMate);
+  moveHistory.push(moveText);
+  updateHistoryUI();
+
+  turn = nextTurn;
 }
 
 // ==========================================
-// LÓGICA DE JAQUE Y DETECCIÓN DE AMENAZAS
+// LÓGICA DE JAQUE Y AMENAZAS
 // ==========================================
 function findKing(color) {
   const kingSymbol = color === 'white' ? 'wK' : 'bK';
@@ -249,7 +285,6 @@ function isSquareAttacked(square, attackerColor) {
     for (let c = 0; c < 8; c++) {
       const piece = boardState[r][c];
       if (piece && getPieceColor(piece) === attackerColor) {
-        // Pasamos ignoreKingCastling = true para cortar el bucle de recursión
         if (isMoveValid({ row: r, col: c }, square, true)) {
           return true;
         }
@@ -266,19 +301,13 @@ function isKingInCheck(color) {
   return isSquareAttacked(kingSquare, enemyColor);
 }
 
-// ==========================================
-// SIMULACIÓN Y VALIDACIÓN DE LEGALIDAD
-// ==========================================
 function isMoveLegal(from, to) {
   if (!isMoveValid(from, to)) return false;
 
   const piece = boardState[from.row][from.col];
   const color = getPieceColor(piece);
-
-  // Guardado profundo para restaurar perfecto la simulación
   const originalBoard = structuredClone(boardState);
 
-  // Manejo de Peón al paso en simulación
   if ((piece === 'wP' || piece === 'bP') && enPassantTarget) {
     if (to.row === enPassantTarget.row && to.col === enPassantTarget.col) {
       const capturedPawnRow = color === 'white' ? to.row + 1 : to.row - 1;
@@ -286,13 +315,10 @@ function isMoveLegal(from, to) {
     }
   }
 
-  // Simulación
   boardState[to.row][to.col] = piece;
   boardState[from.row][from.col] = null;
 
   const inCheck = isKingInCheck(color);
-
-  // Restauración completa del estado
   boardState = originalBoard;
 
   return !inCheck;
@@ -321,14 +347,34 @@ function checkGameStatus() {
   const movesAvailable = hasAnyLegalMove(turn);
 
   if (inCheck && !movesAvailable) {
-    setTimeout(() => alert(`¡Jaque Mate! Ganaron las ${turn === 'white' ? 'Negras' : 'Blancas'}.`), 50);
+    isGameOver = true;
+    setTimeout(() => alert(`¡Jaque Mate! Ganaron las ${turn === 'white' ? 'Negras' : 'Blancas'}.`), 100);
   } else if (!inCheck && !movesAvailable) {
-    setTimeout(() => alert('¡Tablas por Ahogado! No hay movimientos legales.'), 50);
+    isGameOver = true;
+    setTimeout(() => alert('¡Tablas por Ahogado! No hay movimientos legales.'), 100);
   }
 }
 
+function updateHistoryUI() {
+  const historyElement = document.getElementById('move-history');
+  if (!historyElement) return;
+
+  historyElement.innerHTML = '';
+  for (let i = 0; i < moveHistory.length; i += 2) {
+    const moveNum = Math.floor(i / 2) + 1;
+    const whiteMove = moveHistory[i];
+    const blackMove = moveHistory[i + 1] || '';
+
+    const moveSpan = document.createElement('span');
+    moveSpan.className = 'history-move';
+    moveSpan.textContent = `${moveNum}. ${whiteMove} ${blackMove}`.trim();
+    historyElement.appendChild(moveSpan);
+  }
+  historyElement.scrollTop = historyElement.scrollHeight;
+}
+
 // ==========================================
-// RENDERIZADO SVG Y EVENTOS
+// RENDERIZADO SVG Y EVENTOS VISUALES
 // ==========================================
 function drawBoard() {
   const boardElement = document.getElementById('board');
@@ -336,6 +382,8 @@ function drawBoard() {
   boardElement.innerHTML = '';
 
   const validMoves = selectedSquare ? getLegalMovesForSquare(selectedSquare) : [];
+  const checkedKingSquare = isKingInCheck(turn) ? findKing(turn) : null;
+  const movesAvailable = hasAnyLegalMove(turn);
 
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
@@ -347,6 +395,16 @@ function drawBoard() {
         square.classList.add('selected');
       }
 
+      // 1. Resaltar Jaque / Jaque Mate en el Rey
+      if (checkedKingSquare && checkedKingSquare.row === row && checkedKingSquare.col === col) {
+        if (!movesAvailable) {
+          square.classList.add('checkmate-king'); // Efecto Jaque Mate
+        } else {
+          square.classList.add('in-check'); // Efecto Jaque Rojo
+        }
+      }
+
+      // Dibujar pieza
       const piece = boardState[row][col];
       if (piece) {
         const img = document.createElement('img');
@@ -356,10 +414,24 @@ function drawBoard() {
         square.appendChild(img);
       }
 
+      // 2. Indicador de movimiento sugerido o Captura (roja)
       const isPossibleMove = validMoves.some(m => m.row === row && m.col === col);
       if (isPossibleMove) {
         const dot = document.createElement('div');
-        dot.className = 'move-dot';
+
+        // Es captura si hay pieza enemiga o si es casilla destino de Peón al Paso
+        const selectedPiece = boardState[selectedSquare.row][selectedSquare.col];
+        const isEnPassantCapture = (selectedPiece === 'wP' || selectedPiece === 'bP') &&
+          enPassantTarget &&
+          enPassantTarget.row === row &&
+          enPassantTarget.col === col;
+
+        if (piece || isEnPassantCapture) {
+          dot.className = 'move-dot capture'; // Círculo/Anillo Rojo de Captura
+        } else {
+          dot.className = 'move-dot'; // Punto Verde normal
+        }
+
         square.appendChild(dot);
       }
 
@@ -370,6 +442,8 @@ function drawBoard() {
 }
 
 function handleSquareClick(row, col) {
+  if (isGameOver) return;
+
   const clickedPiece = boardState[row][col];
 
   if (!selectedSquare) {
@@ -382,14 +456,41 @@ function handleSquareClick(row, col) {
     } else if (isMoveLegal(selectedSquare, { row, col })) {
       executeMove(selectedSquare, { row, col });
       selectedSquare = null;
-      drawBoard();
       checkGameStatus();
-      return;
     } else if (clickedPiece && getPieceColor(clickedPiece) === turn) {
       selectedSquare = { row, col };
     }
   }
   drawBoard();
 }
+
+
+function resetGame() {
+  boardState = structuredClone(initialBoard);
+  selectedSquare = null;
+  turn = 'white';
+  isGameOver = false;
+  moveHistory = [];
+  enPassantTarget = null;
+
+  hasMoved = {
+    whiteKing: false, blackKing: false,
+    whiteRookK: false, whiteRookQ: false,
+    blackRookK: false, blackRookQ: false
+  };
+
+  updateHistoryUI();
+  drawBoard();
+}
+
+// Escuchador de eventos al cargar el documento
+document.addEventListener('DOMContentLoaded', () => {
+  drawBoard();
+
+  const resetBtn = document.getElementById('reset-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', resetGame);
+  }
+});
 
 document.addEventListener('DOMContentLoaded', drawBoard);

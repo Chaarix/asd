@@ -10,7 +10,11 @@
   --accent-hover: #1a4971;
   --border: #e2e8f0;
 }
-
+:root {
+  --bg-card: #262421;
+  --border: #3c3934;
+  --text-color: #ccc;
+}
 * {
   box-sizing: border-box;
 }
@@ -349,4 +353,106 @@ body.theme-chess .main-nav a.active {
   font-size: 0.93rem;
   line-height: 1.5;
   color: #4a5568;
+}
+/* ==========================================
+   ESTILOS DE HISTORIAL Y EFECTOS VISUALES
+   ========================================== */
+
+.move-dot.capture {
+  background-color: transparent;
+  border: 4px solid rgba(129, 182, 76, 0.80);
+  width: 82%;
+  height: 82%;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+/* Casilla de Rey en Jaque */
+.square.in-check {
+  background-color: #dc2626 !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Efecto Especial de Jaque Mate (Sin romper la cuadrícula) */
+.square.checkmate-king {
+  background-color: #7f1d1d !important;
+}
+
+.square.checkmate-king img {
+  animation: pulse-checkmate 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-checkmate {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 2px #b91c1c);
+  }
+  100% {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 8px #b91c1c) brightness(1.2);
+  }
+}
+
+/* Contenedor del Historial de Jugadas */
+.history-container {
+  margin-top: 1.5rem;
+  background: #262421;
+  border: 1px solid #3c3934;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  max-width: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.history-container h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  color: #cccccc;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.3rem;
+}
+
+.history-list {
+  max-height: 110px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.4rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+}
+
+.history-move {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  text-align: center;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+/* Botón Volver a empezar */
+.controls-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.btn-reset {
+  background-color: #262421;
+  color: #bababa;
+  border: 1px solid #3c3934;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reset:hover {
+  background-color: #363431;
+  color: #ffffff;
+  border-color: #524f4a;
 }
