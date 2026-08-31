@@ -90,7 +90,7 @@ function getLegalMovesForSquare(from) {
   return legalMoves;
 }
 
-// 2. REY (Con validación estricta de Enroque sin Jaque)
+// 2. REY
 function isValidKingMove(from, to, piece) {
   const color = getPieceColor(piece);
   const rowDiff = Math.abs(to.row - from.row);
@@ -103,7 +103,6 @@ function isValidKingMove(from, to, piece) {
   if (rowDiff === 0 && (to.col - from.col === 2 || to.col - from.col === -2)) {
     const enemyColor = color === 'white' ? 'black' : 'white';
 
-    // No puede enrocar si está en jaque actualmente
     if (isSquareAttacked(from, enemyColor)) return false;
 
     const isKingSide = to.col > from.col;
@@ -112,19 +111,19 @@ function isValidKingMove(from, to, piece) {
       if (hasMoved.whiteKing) return false;
       if (isKingSide) {
         if (hasMoved.whiteRookK || !isPathClear(from, {row: 7, col: 7})) return false;
-        if (isSquareAttacked({row: 7, col: 5}, enemyColor)) return false; // Casilla de paso
+        if (isSquareAttacked({row: 7, col: 5}, enemyColor)) return false;
       } else {
         if (hasMoved.whiteRookQ || !isPathClear(from, {row: 7, col: 0})) return false;
-        if (isSquareAttacked({row: 7, col: 3}, enemyColor)) return false; // Casilla de paso
+        if (isSquareAttacked({row: 7, col: 3}, enemyColor)) return false;
       }
     } else {
       if (hasMoved.blackKing) return false;
       if (isKingSide) {
         if (hasMoved.blackRookK || !isPathClear(from, {row: 0, col: 7})) return false;
-        if (isSquareAttacked({row: 0, col: 5}, enemyColor)) return false; // Casilla de paso
+        if (isSquareAttacked({row: 0, col: 5}, enemyColor)) return false;
       } else {
         if (hasMoved.blackRookQ || !isPathClear(from, {row: 0, col: 0})) return false;
-        if (isSquareAttacked({row: 0, col: 3}, enemyColor)) return false; // Casilla de paso
+        if (isSquareAttacked({row: 0, col: 3}, enemyColor)) return false;
       }
     }
     return true;
@@ -152,7 +151,7 @@ function isPathClear(from, to) {
   return true;
 }
 
-function isMoveValid(from, to) {
+function isMoveValid(from, to, ignoreKingCastling = false) {
   const piece = boardState[from.row][from.col];
   const targetPiece = boardState[to.row][to.col];
   const pieceColor = getPieceColor(piece);
@@ -165,13 +164,17 @@ function isMoveValid(from, to) {
     case 'wN': case 'bN': return isValidKnightMove(from, to);
     case 'wB': case 'bB': return isValidBishopMove(from, to);
     case 'wQ': case 'bQ': return isValidQueenMove(from, to);
-    case 'wK': case 'bK': return isValidKingMove(from, to, piece);
+    case 'wK': case 'bK':
+      if (ignoreKingCastling) {
+        return Math.abs(to.row - from.row) <= 1 && Math.abs(to.col - from.col) <= 1;
+      }
+      return isValidKingMove(from, to, piece);
     default: return false;
   }
 }
 
 // ==========================================
-// EJECUCIÓN DEL MOVIMIENTO Y REGLAS ESPECIALES
+// EJECUCIÓN DEL MOVIMIENTO
 // ==========================================
 function executeMove(from, to) {
   const piece = boardState[from.row][from.col];
@@ -199,7 +202,7 @@ function executeMove(from, to) {
   boardState[to.row][to.col] = piece;
   boardState[from.row][from.col] = null;
 
-  // 3. Actualizar Peón al Paso para el siguiente turno
+  // 3. Actualizar Peón al Paso
   if ((piece === 'wP' || piece === 'bP') && Math.abs(to.row - from.row) === 2) {
     const targetRow = color === 'white' ? from.row - 1 : from.row + 1;
     enPassantTarget = { row: targetRow, col: from.col };
@@ -218,6 +221,12 @@ function executeMove(from, to) {
   if (from.row === 7 && from.col === 0) hasMoved.whiteRookQ = true;
   if (from.row === 0 && from.col === 7) hasMoved.blackRookK = true;
   if (from.row === 0 && from.col === 0) hasMoved.blackRookQ = true;
+
+  // 6. Si se captura una torre enemiga en su origen, desactivar su enroque
+  if (to.row === 0 && to.col === 0) hasMoved.blackRookQ = true;
+  if (to.row === 0 && to.col === 7) hasMoved.blackRookK = true;
+  if (to.row === 7 && to.col === 0) hasMoved.whiteRookQ = true;
+  if (to.row === 7 && to.col === 7) hasMoved.whiteRookK = true;
 
   turn = turn === 'white' ? 'black' : 'white';
 }
@@ -240,7 +249,8 @@ function isSquareAttacked(square, attackerColor) {
     for (let c = 0; c < 8; c++) {
       const piece = boardState[r][c];
       if (piece && getPieceColor(piece) === attackerColor) {
-        if (isMoveValid({ row: r, col: c }, square)) {
+        // Pasamos ignoreKingCastling = true para cortar el bucle de recursión
+        if (isMoveValid({ row: r, col: c }, square, true)) {
           return true;
         }
       }
@@ -262,19 +272,28 @@ function isKingInCheck(color) {
 function isMoveLegal(from, to) {
   if (!isMoveValid(from, to)) return false;
 
-  const color = getPieceColor(boardState[from.row][from.col]);
-  const originalFromPiece = boardState[from.row][from.col];
-  const originalToPiece = boardState[to.row][to.col];
+  const piece = boardState[from.row][from.col];
+  const color = getPieceColor(piece);
 
-  // Simulación del movimiento
-  boardState[to.row][to.col] = originalFromPiece;
+  // Guardado profundo para restaurar perfecto la simulación
+  const originalBoard = structuredClone(boardState);
+
+  // Manejo de Peón al paso en simulación
+  if ((piece === 'wP' || piece === 'bP') && enPassantTarget) {
+    if (to.row === enPassantTarget.row && to.col === enPassantTarget.col) {
+      const capturedPawnRow = color === 'white' ? to.row + 1 : to.row - 1;
+      boardState[capturedPawnRow][to.col] = null;
+    }
+  }
+
+  // Simulación
+  boardState[to.row][to.col] = piece;
   boardState[from.row][from.col] = null;
 
   const inCheck = isKingInCheck(color);
 
-  // Restaurar estado
-  boardState[from.row][from.col] = originalFromPiece;
-  boardState[to.row][to.col] = originalToPiece;
+  // Restauración completa del estado
+  boardState = originalBoard;
 
   return !inCheck;
 }
@@ -302,11 +321,9 @@ function checkGameStatus() {
   const movesAvailable = hasAnyLegalMove(turn);
 
   if (inCheck && !movesAvailable) {
-    alert(`¡Jaque Mate! Ganaron las ${turn === 'white' ? 'Negras' : 'Blancas'}.`);
+    setTimeout(() => alert(`¡Jaque Mate! Ganaron las ${turn === 'white' ? 'Negras' : 'Blancas'}.`), 50);
   } else if (!inCheck && !movesAvailable) {
-    alert('¡Tablas por Ahogado! No hay movimientos legales.');
-  } else if (inCheck) {
-    console.log(`¡El rey ${turn} está en Jaque!`);
+    setTimeout(() => alert('¡Tablas por Ahogado! No hay movimientos legales.'), 50);
   }
 }
 
@@ -318,7 +335,6 @@ function drawBoard() {
   if (!boardElement) return;
   boardElement.innerHTML = '';
 
-  // Obtener todos los movimientos válidos de la pieza seleccionada
   const validMoves = selectedSquare ? getLegalMovesForSquare(selectedSquare) : [];
 
   for (let row = 0; row < 8; row++) {
@@ -331,7 +347,6 @@ function drawBoard() {
         square.classList.add('selected');
       }
 
-      // Dibujar pieza si existe
       const piece = boardState[row][col];
       if (piece) {
         const img = document.createElement('img');
@@ -341,7 +356,6 @@ function drawBoard() {
         square.appendChild(img);
       }
 
-      // Comprobar si esta casilla es un destino válido
       const isPossibleMove = validMoves.some(m => m.row === row && m.col === col);
       if (isPossibleMove) {
         const dot = document.createElement('div');
@@ -368,7 +382,9 @@ function handleSquareClick(row, col) {
     } else if (isMoveLegal(selectedSquare, { row, col })) {
       executeMove(selectedSquare, { row, col });
       selectedSquare = null;
+      drawBoard();
       checkGameStatus();
+      return;
     } else if (clickedPiece && getPieceColor(clickedPiece) === turn) {
       selectedSquare = { row, col };
     }

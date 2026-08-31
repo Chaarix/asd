@@ -6,12 +6,12 @@
   <title>Ajedrez - Tablero Interactivo</title>
 
   <!-- Favicon -->
-  <!-- Favicon con el caballo blanco normal -->
   <link rel="icon" type="image/svg+xml" href="img/wN.svg">
+
   <!-- Hoja de Estilos Externa -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="theme-chess">
 
 <div class="container">
   <header>
@@ -22,6 +22,7 @@
     <nav class="main-nav">
       <a href="index.html">Inicio</a>
       <a href="lichess.html" class="active">Ajedrez</a>
+      <a href="https://github.com/TU_USUARIO" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
   </header>
 
@@ -29,39 +30,40 @@
     <section class="card">
       <h2>Tablero de Ajedrez</h2>
       <p>Hacé clic en una pieza para seleccionarla y ver los movimientos posibles.</p>
-      <!-- ENLACE Y TEXTO ABAJO DEL TABLERO -->
+
+      <!-- TABLERO -->
+      <div id="board-container">
+        <div id="board"></div>
+      </div>
+
+      <!-- LICHESS & PERFIL -->
       <div class="lichess-profile-box">
-        <p>¿Jugamos unas partidas?</p>
-        <a href="https://lichess.org/@/Charix" target="_blank" rel="noopener noreferrer" class="btn-lichess">
-          <!-- SVG del logo de Lichess adaptado -->
+        <p>¿Querés jugar una partida o ver mi perfil oficial?</p>
+        <a href="https://lichess.org/@/TU_USUARIO" target="_blank" rel="noopener noreferrer" class="btn-lichess">
           <svg class="lichess-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
             <path fill="currentColor" stroke="currentColor" stroke-linejoin="round" d="M38.956.5c-3.53.418-6.452.902-9.286 2.984C5.534 1.786-.692 18.533.68 29.364 3.493 50.214 31.918 55.785 41.329 41.7c-7.444 7.696-19.276 8.752-28.323 3.084S-.506 27.392 4.683 17.567C9.873 7.742 18.996 4.535 29.03 6.405c2.43-1.418 5.225-3.22 7.655-3.187l-1.694 4.86 12.752 21.37c-.439 5.654-5.459 6.112-5.459 6.112-.574-1.47-1.634-2.942-4.842-6.036-3.207-3.094-17.465-10.177-15.788-16.207-2.001 6.967 10.311 14.152 14.04 17.663 3.73 3.51 5.426 6.04 5.795 6.756 0 0 9.392-2.504 7.838-8.927L37.4 7.171z"/>
           </svg>
           Visitar mi perfil en Lichess.org
         </a>
       </div>
-      <!-- Bloque de práctica e instrucciones -->
-      <div class="practice-box">
-        <h3>Práctica y Entrenamiento - update 1</h3>
-        <p>
-          ¡El tablero interactivo de arriba está listo para usar! Hacé clic en cualquier pieza para ver sus movimientos válidos resaltados con puntos verdes.
-          Aprovechá este espacio para practicar aperturas, repasar el movimiento de piezas complejas como el caballo, o probar secuencias tácticas antes de tu próxima partida.
-        </p>
-      </div>
 
-      <!-- TABLERO -->
-      <div id="board-container">
-        <div id="board"></div>
+      <!-- PRACTICA -->
+      <div class="practice-box">
+        <h3>♟️ Práctica y Entrenamiento - update 2</h3>
+        <p>Hacé clic en cualquier pieza para ver sus movimientos válidos resaltados con puntos verdes.</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>Todos los derechos reservados. Eliseo.</p>
+    <div class="footer-content">
+      <img src="favcon.jpg" alt="Logo de cierre" class="footer-logo">
+      <p>Sitio web creado para testear el flujo de desarrollo con IntelliJ y GitHub Pages.</p>
+    </div>
   </footer>
 </div>
 
-<!-- SCRIPT DEL JUEGO -->
+<!-- Cargar el script solo al final -->
 <script src="js/chess.js"></script>
 </body>
 </html>
