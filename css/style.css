@@ -1,20 +1,18 @@
 /* ==========================================
-   1. VARIABLES & RESET
+   1. VARIABLES & RESET (PALETA VIOLETA LLA Y NEGRO)
    ========================================== */
 :root {
-  --bg-color: #f8f9fa;
-  --card-bg: #ffffff;
-  --text-primary: #212529;
-  --text-secondary: #495057;
-  --accent: #2b6cb0;
-  --accent-hover: #1a4971;
-  --border: #e2e8f0;
-}
-:root {
-  --bg-card: #262421;
-  --border: #3c3934;
+  --bg-color: #0b0b0b;
+  --card-bg: #1a1a1a;
+  --text-primary: #f3f4f6;
+  --text-secondary: #a1a1aa;
+  --accent: #743bbc;         /* Violeta LLA */
+  --accent-hover: #52248a;   /* Violeta Oscuro / Hover */
+  --border: #2a2a2a;
+  --bg-card: #262421;        /* Mantenido para el historial de ajedrez */
   --text-color: #ccc;
 }
+
 * {
   box-sizing: border-box;
 }
@@ -62,6 +60,7 @@ footer {
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--accent);
 }
 
 /* ==========================================
@@ -76,30 +75,38 @@ footer {
 }
 
 .main-nav a {
-  color: var(--accent);
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  transition: background-color 0.2s, color 0.2s;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .main-nav a:hover {
-  background-color: #e2e8f0;
+  background-color: var(--border);
+  color: #ffffff;
+  border-color: var(--accent);
 }
 
 .main-nav a.active {
   background-color: var(--accent);
   color: #ffffff;
+  border-color: var(--accent);
 }
 
 .main-nav a[target="_blank"] {
-  background-color: #24292e;
-  color: #ffffff;
+  background-color: #121212;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
 .main-nav a[target="_blank"]:hover {
-  background-color: #000000;
+  background-color: var(--accent-hover);
+  color: #ffffff;
+  border-color: var(--accent);
 }
 
 /* ==========================================
@@ -110,7 +117,7 @@ footer {
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   border: 1px solid var(--border);
 }
 
@@ -135,7 +142,8 @@ p.subtitle {
 .preamble {
   font-family: Georgia, serif;
   font-style: italic;
-  background-color: #f7fafc;
+  background-color: #121212;
+  color: var(--text-primary);
   padding: 1.5rem;
   border-left: 4px solid var(--accent);
   border-radius: 4px;
@@ -144,7 +152,7 @@ p.subtitle {
 blockquote {
   margin: 1.5rem 0;
   padding-left: 1rem;
-  border-left: 3px solid #cbd5e0;
+  border-left: 3px solid var(--accent);
   color: var(--text-secondary);
 }
 
@@ -216,7 +224,7 @@ body.theme-chess .card.dark-square .stage-name {
 }
 
 body.theme-chess footer p { color: #c2b299; }
-body.theme-chess .main-nav a { color: #f0e6d2; }
+body.theme-chess .main-nav a { color: #f0e6d2; background-color: transparent; }
 body.theme-chess .main-nav a:hover { background-color: rgba(237, 214, 176, 0.2); }
 
 body.theme-chess .main-nav a.active {
@@ -237,7 +245,6 @@ body.theme-chess .main-nav a.active {
 
 #board {
   display: grid;
-  /* 12.5% x 8 = 100% perfecto e inamovible */
   grid-template-columns: repeat(8, 12.5%);
   grid-template-rows: repeat(8, 12.5%);
   width: 100%;
@@ -258,7 +265,6 @@ body.theme-chess .main-nav a.active {
   cursor: pointer;
   user-select: none;
   overflow: hidden;
-  /* Fuerza a la casilla a no tener alto de línea de texto */
   line-height: 0;
   font-size: 0;
 }
@@ -300,7 +306,7 @@ body.theme-chess .main-nav a.active {
 .lichess-profile-box {
   margin-top: 25px;
   padding-top: 15px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border);
   text-align: center;
 }
 
@@ -332,8 +338,8 @@ body.theme-chess .main-nav a.active {
 .practice-box {
   margin-top: 20px;
   padding: 16px 20px;
-  background-color: #f8f9fa;
-  border-left: 4px solid #829769;
+  background-color: #121212;
+  border-left: 4px solid var(--accent);
   border-radius: 4px;
   text-align: left;
 }
@@ -342,7 +348,7 @@ body.theme-chess .main-nav a.active {
   margin-top: 0;
   margin-bottom: 8px;
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -352,12 +358,12 @@ body.theme-chess .main-nav a.active {
   margin: 0;
   font-size: 0.93rem;
   line-height: 1.5;
-  color: #4a5568;
+  color: var(--text-secondary);
 }
+
 /* ==========================================
    ESTILOS DE HISTORIAL Y EFECTOS VISUALES
    ========================================== */
-
 .move-dot.capture {
   background-color: transparent;
   border: 4px solid rgba(129, 182, 76, 0.80);
@@ -373,7 +379,7 @@ body.theme-chess .main-nav a.active {
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Efecto Especial de Jaque Mate (Sin romper la cuadrícula) */
+/* Efecto Especial de Jaque Mate */
 .square.checkmate-king {
   background-color: #7f1d1d !important;
 }
@@ -432,6 +438,7 @@ body.theme-chess .main-nav a.active {
   color: #e2e8f0;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
+
 /* Botón Volver a empezar */
 .controls-container {
   display: flex;

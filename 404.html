@@ -12,13 +12,13 @@
     }
 
     html {
-      color: #888;
+      color: #3b4125; /* Verde oliva oscuro para el texto base */
       display: table;
       font-family: sans-serif;
       height: 100%;
       text-align: center;
       width: 100%;
-      background-color: #f8f9fa;
+      background-color: #c2b299; /* Fondo claro crema/arena */
     }
 
     body {
@@ -27,15 +27,24 @@
       margin: 2em auto;
     }
 
+    /* Estilo para la imagen ups.jpg con borde de la paleta */
+    .error-img {
+      max-width: 250px;
+      height: auto;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 2px solid #5f6b38; /* Verde oliva medio */
+    }
+
     h1 {
-      color: #222;
+      color: #3b4125; /* Verde oliva oscuro */
       font-size: 4em;
       font-weight: 700;
       margin-bottom: 0.2em;
     }
 
     h2 {
-      color: #555;
+      color: #5f6b38; /* Verde oliva medio */
       font-size: 1.5em;
       font-weight: 400;
       margin-bottom: 0.8em;
@@ -44,22 +53,23 @@
     p {
       margin: 0 auto 1.5em auto;
       width: 280px;
-      color: #666;
+      color: #4a522d;
     }
 
     .btn {
       display: inline-block;
       padding: 0.6em 1.2em;
-      background-color: #2b6cb0;
-      color: #dddd;
+      background-color: #c29b38; /* Amarillo apagado / Ocre */
+      color: #252918; /* Texto oscuro para buen contraste */
       text-decoration: none;
       border-radius: 4px;
       font-weight: bold;
-      transition: background-color 0.2s;
+      transition: background-color 0.2s, color 0.2s;
     }
 
     .btn:hover {
-      background-color: #1a4971;
+      background-color: #5f6b38; /* Verde oliva medio al pasar el mouse */
+      color: #f4f3ed; /* Texto claro */
     }
 
     @media only screen and (max-width: 280px) {
@@ -69,14 +79,21 @@
       h1 {
         font-size: 2.5em;
       }
+      .error-img {
+        max-width: 180px;
+      }
     }
   </style>
 </head>
 
 <body>
+
+<!-- IMAGEN UPS.JPG -->
+<img src="ups.jpg" alt=":(" class="error-img">
+
 <h1>404</h1>
 <h2>Página no encontrada</h2>
-<p>Lo sentimos, la página que estás buscando no existe o fue movida.</p>
+<p>Hoy no existe, mañana si</p>
 <p>Andate</p>
 <a href="https://chaarix.github.io/asd/" class="btn">Volver al inicio</a>
 </body>
